@@ -13,6 +13,7 @@ class Ship(pygame.sprite.Sprite):
         self.sight_vector = pygame.math.Vector2(0.1, 0)
         self.sight_vector_copy = self.sight_vector
         self.direction = pygame.math.Vector2()
+        self.speed = 0.1
         self.moving = False
 
     def rotate(self):
@@ -26,7 +27,8 @@ class Ship(pygame.sprite.Sprite):
 
             # rotating sight_vector with ship
             self.sight_vector = self.sight_vector_copy.rotate(-self.angle)
-            self.sight_vector.normalize()
+            self.sight_vector = self.sight_vector.normalize()
+            self.sight_vector *= self.speed
 
         elif keys[pygame.K_a]:
             self.angle += 2
@@ -36,7 +38,8 @@ class Ship(pygame.sprite.Sprite):
 
             # rotating sight_vector with ship
             self.sight_vector = self.sight_vector_copy.rotate(-self.angle)
-            self.sight_vector.normalize()
+            self.sight_vector = self.sight_vector.normalize()
+            self.sight_vector *= self.speed
 
     def move(self):
         keys = pygame.key.get_pressed()
@@ -62,15 +65,17 @@ class Ship(pygame.sprite.Sprite):
         if self.rect.centerx > WIDTH:
             self.rect.centerx -= WIDTH
 
-        elif self.rect.centerx < 0:
+        elif self.rect.centerx <= 0:
             self.rect.centerx += WIDTH
 
         elif self.rect.centery > HEIGHT:
             self.rect.centery -= HEIGHT
 
-        elif self.rect.centery < 0:
+        elif self.rect.centery <= 0:
             self.rect.centery += HEIGHT
 
     def update(self):
+        print(self.rect.center + self.direction)
+        print(self.direction)
         self.rotate()
         self.move()

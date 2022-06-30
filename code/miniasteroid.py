@@ -3,26 +3,28 @@ from settings import *
 import random
 
 
-class Asteroid(pygame.sprite.Sprite):
-    def __init__(self):
+class MiniAsteroid(pygame.sprite.Sprite):
+    def __init__(self, num, center):
         super().__init__()
-        self.image1 = pygame.image.load('data/asteroid1.png').convert_alpha()
-        self.image2 = pygame.image.load('data/asteroid2.png').convert_alpha()
-        self.image = random.choice([self.image1, self.image2])
+        if num == 1:
+            self.image = pygame.image.load('data/asteroidmini1.png').convert_alpha()
+        else:
+            self.image = pygame.image.load('data/asteroidmini2.png').convert_alpha()
         self.image_copy = self.image
+        self.rect = self.image.get_rect(center=center)
 
-        x = random.randint(0, WIDTH)
-        y = random.randint(0, HEIGHT)
-        self.rect = self.image.get_rect(center=random.choice([(x, -100), (-100, y)]))
-
-        x = random.choice([random.randint(-4, -1), random.randint(1, 4)])
-        y = random.choice([random.randint(-4, -1), random.randint(1, 4)])
+        x, y = random.randint(1, 4), random.randint(1, 4)
         self.direction = pygame.math.Vector2(x, y)
 
+        if num == 1:
+            self.direction = self.direction.rotate(random.choice([random.randint(20, 70), random.randint(110, 160)]))
+        else:
+            self.direction = self.direction.rotate(random.choice([random.randint(200, 250), random.randint(290, 340)]))
         self.direction = self.direction.normalize()
+
         self.rotate_value = random.randint(-4, 4)
         self.angle = 0
-        self.speed = 4
+        self.speed = 3
 
     def move(self):
         self.rect.center += self.direction * self.speed
